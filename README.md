@@ -2,7 +2,7 @@
 
 Dedicated automation for `eliran_mashkantes`. Facebook and Windsor are not used.
 
-Status: implementation prepared, publication disabled until cloud verification and secret setup are complete.
+Status on 2026-11-12: cloud checks passed (run 43202610089), including 11 tests, Hebrew image and video rendering, public media hosting, durable journal and account identity from GitHub. Meta accepted unpublished image, carousel and reel containers. The encrypted secret is configured, the existing preparation worker now exports to this repository, and the legacy Instagram publisher is paused. Production publication is enabled in repository variables after these checks. The first scheduled content export and live publication remain unverified until their scheduled run.
 
 ## Public content only
 
@@ -24,7 +24,7 @@ The repository variable `IG_PUBLICATION_ENABLED` must be `true` before publishin
 
 Rendered files are committed to `media/`. Their immutable public URLs and hashes are recorded in `prepared/`. Every publication stage is committed to `state/YYYY-MM-DD.json` before any corresponding Meta action. A claimed or uncertain record prevents automatic retries across workflow runs. Do not delete or overwrite it to retry. Inspect the actual Instagram account first.
 
-The workflow is never triggered by pull requests or issue contents. The token is provided only to the publisher step. Normal publishing errors never print token values or raw Meta response bodies.
+The workflow is never triggered by pull requests or issue contents. The token is provided to the publisher and the manual account verification step. Normal publishing errors never print token values or raw Meta response bodies.
 
 ## Checks
 
