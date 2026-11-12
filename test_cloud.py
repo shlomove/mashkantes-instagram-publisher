@@ -1,5 +1,9 @@
 import json
 import unittest
+import tempfile
+from pathlib import Path
+from PIL import Image
+from render import render
 from cloud_runner import RemoteLedger
 
 class FakeRepo:
@@ -11,6 +15,15 @@ class FakeRepo:
         self.data=data;self.version+=1;return str(self.version),'commit'
 
 class DurableLedgerTests(unittest.TestCase):
+    def test_hebrew_renderer_and_overflow_guard(self):
+        with tempfile.TemporaryDirectory() as folder:
+            source={'format':'image','slides':[{'title':'בדיקת עברית','body':'מסר ברור מהפריים הראשון.'}]}
+            output=render(source,Path(folder))
+            with Image.open(output[0]) as image:
+                self.assertEqual(image.size,(1080,1350))
+                self.assertEqual(image.format,'JPEG')
+            source['slides'][0]['body']='טקסט ארוך ' * 500
+            with self.assertRaises(ValueError): render(source,Path(folder))
     def test_duplicate_claim_from_another_runner(self):
         r=FakeRepo();a=RemoteLedger(r,'2026-11-12');a.claim('slot','digest')
         with self.assertRaises(RuntimeError): RemoteLedger(r,'2026-11-12').claim('slot','digest')
