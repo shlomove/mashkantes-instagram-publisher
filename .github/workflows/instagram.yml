@@ -21,6 +21,10 @@ jobs:
           persist-credentials: false
       - name: Install renderer
         run: python -m pip install Pillow==11.3.0 python-bidi==0.6.7
+      - name: Install video encoder
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
       - name: Verify code
         run: python -m unittest -v test_publisher test_cloud
       - name: Verify cloud rendering and public media without Instagram publication
